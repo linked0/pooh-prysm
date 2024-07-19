@@ -1,0 +1,83 @@
+version: '3.3'
+services:
+    node1:
+        container_name: poohprysm-1
+        image: linked0/pooh-prysm:latest
+        ports:
+            - "8080:8080"
+            - "4000:4000"
+            - "13000:13000"
+            - "12000:12000/udp"
+        volumes:
+            - $HOME/.pooh/cl:/cl
+            - $HOME/.pooh/el:/el
+            - $HOME/.pooh/cl/config:/config
+        restart: always
+        command:
+            --chain-config-file=/config/chain-config.yaml
+            --config-file=/config/config.yaml
+            --datadir=/cl
+            --execution-endpoint=/el/geth.ipc
+            --p2p-host-ip=${P2P_HOST_IP}
+            --contract-deployment-block=22
+            --accept-terms-of-use
+            --grpc-gateway-port=3500
+            --rpc-port=4000
+            --monitoring-port=8080
+            --subscribe-all-subnets=false
+            --slasher=false
+
+    node2:
+        ports:
+            - "8080:8080"
+            - "13000:13000"
+            - "12000:12000/udp"
+        volumes:
+            - $HOME/.pooh/cl:/cl
+            - $HOME/.pooh/el:/el
+            - $HOME/.pooh/cl/config:/config
+        restart: always
+        command:
+            --chain-config-file=/config/chain-config.yaml
+            --config-file=/config/config.yaml
+            --datadir=/cl
+            --execution-endpoint=/el/geth.ipc
+            --p2p-host-ip=${P2P_HOST_IP}
+            --contract-deployment-block=22
+            --accept-terms-of-use
+            --grpc-gateway-port=3500
+            --rpc-port=4000
+            --monitoring-port=8080
+            --subscribe-all-subnets=true
+            --slasher=false
+#            --slasher=true // 원래 true로 설정되어 있었음
+
+    node3:
+        container_name: poohprysm-3
+        image: linked0/pooh-prysm:v1.0.3
+        ports:
+            - "8080:8080"
+            - "13000:13000"
+            - "12000:12000/udp"
+        volumes:
+            - $HOME/.pooh/cl:/cl
+            - $HOME/.pooh/el:/el
+            - $HOME/.pooh/cl/config:/config
+        restart: always
+        command:
+            --chain-config-file=/config/chain-config.yaml
+            --config-file=/config/config.yaml
+            --datadir=/cl
+            --execution-endpoint=/el/geth.ipc
+            --p2p-host-ip=${P2P_HOST_IP}
+            --contract-deployment-block=22
+            --accept-terms-of-use
+            --grpc-gateway-port=3500
+            --rpc-port=4000
+            --monitoring-port=8080
+            --subscribe-all-subnets=true
+            --slasher=false
+#            --slasher=true // 원래 true로 설정되어 있었음
+
+
+
